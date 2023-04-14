@@ -1,22 +1,21 @@
-
--- CREATE DATABASE FU_LABIA_BookStoreManagement;
--- DROP DATABASE FU_LABIA_BookStoreManagement;
+-- CREATE DATABASE FU_LABIA_BookStoreManagement ;
+--  DROP DATABASE FU_LABIA_BookStoreManagement;
 USE FU_LABIA_BookStoreManagement;
 
 CREATE TABLE `User`(
-	userName varchar(50),
+	username varchar(50),
     `password` varchar(50),
     displayName nvarchar (150),
     dob date,
     email varchar(150),
     createDate date,
     lastActive datetime,
-    avatar blob,
-    CONSTRAINT PK_User PRIMARY KEY (userName)
+    avatarPath varchar(255),
+    CONSTRAINT PK_User PRIMARY KEY (username)
 );
 
 CREATE TABLE `Role`(
-	roleId int NOT NULL,
+	roleId int NOT NULL AUTO_INCREMENT,
 	roleName varchar(50),
 	CONSTRAINT PK_Role PRIMARY KEY (roleId)
 );
@@ -34,7 +33,7 @@ REFERENCES `Role` (roleId);
 
 
 CREATE TABLE Feature(
-	featureId int NOT NULL, 
+	featureId int NOT NULL AUTO_INCREMENT, 
 	featureName varchar(150),
 	url varchar(150),
 	CONSTRAINT PK_Feature PRIMARY KEY (featureId)
@@ -53,12 +52,12 @@ REFERENCES Feature(featureId);
 
 
 CREATE TABLE Book (
-	bookId int NOT NULL,
+	bookId int NOT NULL AUTO_INCREMENT,
     title nvarchar(150),
     authorName nvarchar(150),
     `description` longtext,
-    pdf longblob,
-    cover longblob,
+    pdfPath varchar(255),
+    coverPath varchar(255),
     price float,
     createdBy varchar(50),
     isApproved bit DEFAULT false,
@@ -70,7 +69,7 @@ ALTER TABLE Book ADD CONSTRAINT FK_Book_User FOREIGN KEY(createdBy)
 REFERENCES `User` (username);
 
 CREATE TABLE Category (
-	categoryId int NOT NULL,
+	categoryId int NOT NULL AUTO_INCREMENT,
     categoryName varchar(50),
     CONSTRAINT PK_Category PRIMARY KEY (categoryId)
 );
