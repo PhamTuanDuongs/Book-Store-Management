@@ -4,14 +4,19 @@
  */
 package com.store.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +33,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="Book")
-public class Book {
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "bookId")
+public class Book implements Serializable{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="bookId")
     int bookId;
     @Column
@@ -42,12 +51,11 @@ public class Book {
     boolean isApproved;
     int noSale;
     int noView;
-    
-    @OneToMany(mappedBy = "book")
-    List<Book_Category> book_Category;
-    
+   
     @ManyToOne
-    @MapsId("username")
-    @JoinColumn(name = "createdBy")
-    User createdBy;
+    @JoinColumn(name = "createdBy", referencedColumnName = "username")
+    private User createdBy;
+
+    @ManyToMany(mappedBy = "books")
+    private List<Category> categories;
 }

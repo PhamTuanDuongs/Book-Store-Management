@@ -12,8 +12,8 @@ import com.store.book.repository.RoleRepository;
 import com.store.book.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,12 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class UserController {
+
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value = "user", method = RequestMethod.GET)
+//    @RequestMapping(value = "user", method = RequestMethod.GET)
+    @GetMapping("/users")
     public List<User> getAllFeature() {
-        List<User> list = userRepository.findAll();
-        return list;
+        return userRepository.findAll();
     }
 }

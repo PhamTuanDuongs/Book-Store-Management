@@ -4,18 +4,25 @@
  */
 package com.store.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 
 /**
  *
@@ -26,16 +33,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Feature")
+@Table(name = "Feature")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "featureId")
+public class Feature implements Serializable{
 
-public class Feature {
     @Id
-    @Column(name="featureId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "featureId")
     int featureId;
     @Column
     String featureName;
     String URL;
-    
-    @OneToMany(mappedBy = "feature")
-    List<Role_Feature> role_Feature;
+
+    @ManyToMany
+    @JoinTable(name = "Role_Feature",
+            joinColumns = @JoinColumn(name = "featureId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private List<Role> roles;
 }

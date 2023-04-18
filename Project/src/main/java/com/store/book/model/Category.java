@@ -4,11 +4,19 @@
  */
 package com.store.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,14 +32,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Category")
-public class Category {
+@Table(name = "Category")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "categoryId")
+public class Category implements Serializable {
+
     @Id
-    @Column(name="categoryId")
-    int categoryId;
-    @Column
-    String categoryName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int categoryId;
+
+    @ManyToMany
+    @JoinTable(name = "Book_Category", joinColumns = @JoinColumn(name = "categoryId"), inverseJoinColumns = @JoinColumn(name = "bookId"))
+    private List<Book> books;
     
-    @OneToMany(mappedBy = "category")
-    List<Book_Category> book_Category;
 }

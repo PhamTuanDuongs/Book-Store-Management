@@ -4,12 +4,19 @@
  */
 package com.store.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,8 +33,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="User")
-public class User {
+@Table(name="`User`")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "username")
+public class User implements Serializable{
     @Id
     @Column(name="username")
     String username;
@@ -37,11 +47,15 @@ public class User {
     Date dob;
     String email;
     Date createDate;
-    Date lastActive;
+    private java.sql.Timestamp lastActive;
     String avatarPath;
     @OneToMany(mappedBy = "createdBy")
-    List<Book> book;   
+    List<Book> books;   
     
-    @OneToMany(mappedBy = "user")
-    List<User_Role> user_Role; 
+    @ManyToMany
+    @JoinTable(name = "User_Role",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private List<Role> roles;
+     
 }

@@ -4,12 +4,19 @@
  */
 package com.store.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,18 +31,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Role")
+@Table(name = "Role")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "roleId")
+public class Role implements Serializable{
 
-public class Role {
     @Id
-    @Column(name="roleId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roleId")
     int roleId;
     @Column
     String roleName;
-    
-    @OneToMany(mappedBy = "role")
-    List<Role_Feature> role_Feature;
-    
-    @OneToMany(mappedBy = "role")
-    List<User_Role> user_Role;
+
+    @ManyToMany(mappedBy = "roles")
+    List<User> users;
+
+    @ManyToMany(mappedBy = "roles")
+    List<Feature> features;
+
 }
