@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *
@@ -33,9 +34,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="Book")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "bookId")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "bookId")
+
 public class Book implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +56,7 @@ public class Book implements Serializable{
    
     @ManyToOne
     @JoinColumn(name = "createdBy", referencedColumnName = "username")
+    @JsonIgnore
     private User createdBy;
 
     @ManyToMany(mappedBy = "books")
