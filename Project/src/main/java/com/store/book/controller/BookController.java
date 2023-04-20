@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nhat
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class BookController {
     @Autowired

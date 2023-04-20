@@ -7,18 +7,12 @@ import ListBook from './components/ListBook';
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
         <Route index element={<ListBook />}></Route>
         <Route path="/" element={<ListBook />}></Route>
         <Route path="/listBook" element={<ListBook />}></Route>
       </Routes>
-
-
     </BrowserRouter>
-   
-
-
   );
 }
 
