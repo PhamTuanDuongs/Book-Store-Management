@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author nhat
  */
+
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
