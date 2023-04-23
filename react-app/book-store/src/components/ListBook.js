@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BookService from '../services/BookService';
 import { useNavigate } from 'react-router-dom';
-import IMAGES from './image';
+
 const ListBook = () => {
   //  const navigate = useNavigate();
 
