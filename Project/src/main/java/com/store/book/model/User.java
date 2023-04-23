@@ -34,28 +34,21 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name="`User`")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "username")
 public class User implements Serializable{
     @Id
-    @Column(name="username")
-    String username;
-    @Column
-    String password;
-    String displayName;
-    Date dob;
-    String email;
-    Date createDate;
+    private String username;
+    private String password;
+    private String displayName;
+    private String email;
+    private Date dob;
+    private Date createDate;
+    private String avatarPath;
     private java.sql.Timestamp lastActive;
-    String avatarPath;
+
     @OneToMany(mappedBy = "createdBy")
-    List<Book> books;   
-    
-    @ManyToMany
-    @JoinTable(name = "User_Role",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private List<Book> books;
+
+    @ManyToMany(mappedBy = "users")
     private List<Role> roles;
-     
+    
 }

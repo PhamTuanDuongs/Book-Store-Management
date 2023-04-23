@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,9 +34,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "Role")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "roleId")
 public class Role implements Serializable{
 
     @Id
@@ -44,8 +43,12 @@ public class Role implements Serializable{
     @Column
     String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    List<User> users;
+    @ManyToMany
+    @JoinTable(name = "User_Role",
+            joinColumns = @JoinColumn(name = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "username"))
+    @JsonIgnore
+    private List<User> users;
 
     @ManyToMany(mappedBy = "roles")
     List<Feature> features;
