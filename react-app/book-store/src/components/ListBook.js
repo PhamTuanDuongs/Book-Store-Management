@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BookService from '../services/BookService';
-<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
-
-=======
->>>>>>> duong
 const ListBook = () => {
   const [loading, setLoading] = useState('');
   const [books, setBooks] = useState([]);
