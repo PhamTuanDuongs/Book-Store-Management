@@ -12,7 +12,7 @@ const ListBookByUser  = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await BookService.getBook();
+        const response = await BookService.getBookByUserName();
         setBooks(response.data);
       } catch (error) {
         console.log(error);
