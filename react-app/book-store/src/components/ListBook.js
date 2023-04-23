@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import BookService from '../services/BookService';
+<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
 
+=======
+>>>>>>> duong
 const ListBook = () => {
-  //  const navigate = useNavigate();
-
   const [loading, setLoading] = useState('');
   const [books, setBooks] = useState([]);
-  const [navbar, setNavbar] = useState(false);
+  var pageView = sessionStorage.getItem("pageView");
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -23,11 +24,11 @@ const ListBook = () => {
 
   }, []);
 
-
-
   return (
     <>
+
       <div className="container mx-auto px-4 mt-10">
+        {pageView}
         {!loading && (
           <div className="grid grid-cols-6 gap-6 justify-evenly">
             {books.map((book) => (
