@@ -26,9 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author nhat
  */
+@CrossOrigin(origins = {"*"})
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
-
 public class BookController {
     @Autowired
     BookRepository bookRepository;

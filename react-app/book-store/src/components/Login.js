@@ -1,5 +1,5 @@
-import React, {  useState } from 'react'
 import {toast} from "react-toastify";
+import React, {  useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -8,7 +8,7 @@ function Login() {
     const navigate = useNavigate(); // <-- use hook in component
 
     const onCustomButtonClick = (event) => {
-        navigate('/')
+        navigate('/home')
       }
 
     const ProceedLogin = (e) => {
@@ -68,6 +68,7 @@ function Login() {
                             type='text'
                             className={`w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4`}
                             id='text'
+                            required
                             placeholder="your username"
                         />
                     </div>
@@ -78,6 +79,7 @@ function Login() {
                             type='password'
                             className={`w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4`}
                             id='password'
+                            required
                             placeholder='Your Password'
                         />
                     </div>
