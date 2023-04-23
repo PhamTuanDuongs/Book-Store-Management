@@ -33,9 +33,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "Category")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "categoryId")
 public class Category implements Serializable {
 
     @Id
@@ -44,6 +41,7 @@ public class Category implements Serializable {
     private String categoryName;
     @ManyToMany
     @JoinTable(name = "Book_Category", joinColumns = @JoinColumn(name = "categoryId"), inverseJoinColumns = @JoinColumn(name = "bookId"))
+    @JsonIgnore
     private List<Book> books;
     
 }

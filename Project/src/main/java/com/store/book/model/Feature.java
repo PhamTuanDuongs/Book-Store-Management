@@ -34,9 +34,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "Feature")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "featureId")
 public class Feature implements Serializable{
 
     @Id
@@ -51,5 +48,6 @@ public class Feature implements Serializable{
     @JoinTable(name = "Role_Feature",
             joinColumns = @JoinColumn(name = "featureId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
+    @JsonIgnore
     private List<Role> roles;
 }
