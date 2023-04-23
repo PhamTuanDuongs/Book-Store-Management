@@ -27,10 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("users")
 @CrossOrigin(origins = "http://localhost:3000")
-<<<<<<< HEAD
-=======
 
->>>>>>> duong
 public class UserController {
 
     @Autowired
