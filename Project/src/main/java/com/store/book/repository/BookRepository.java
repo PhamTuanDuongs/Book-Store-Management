@@ -21,6 +21,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByUsername(String username);
 
     @Query(value = "SELECT * FROM Book b join Book_Category bc on b.bookId = bc.bookId where bc.categoryId = ?", nativeQuery = true)
-     List<Book> getByCategoryId(int categoryId);
+    List<Book> getByCategoryId(int categoryId);
 
+    @Query(value = "SELECT * FROM Book where bookId = ?", nativeQuery = true)
+    Book getByBookId(int bookId);
 }
