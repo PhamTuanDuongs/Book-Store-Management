@@ -50,7 +50,7 @@ public class Book implements Serializable{
     String pdfPath;
     String coverPath;
     float price;
-    boolean isApproved;
+    int isApproved;
     int noSale;
     int noView;
    
