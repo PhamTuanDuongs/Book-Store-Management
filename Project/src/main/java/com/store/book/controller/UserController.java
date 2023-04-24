@@ -46,5 +46,15 @@ public class UserController {
         }
     }
     
+       @PostMapping("/login")
+    User loginUser(@RequestBody User user) {
+        User foundUser = userRepository.findByUsername(user.getUsername());
+        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            return foundUser;
+        } else {
+            return null;
+        }
+    }
+
         
 }
