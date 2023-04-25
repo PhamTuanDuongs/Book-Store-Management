@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import BookService from '../services/BookService';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import BookService from "../services/BookService";
+import { useNavigate } from "react-router-dom";
 
-const ListBookByUser  = () => {
-  //  const navigate = useNavigate();
+const ListBookByUser = () => {
+  const navigate = useNavigate(); // Uncomment this line
 
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false); // Change initial state to false
   const [books, setBooks] = useState([]);
   const [navbar, setNavbar] = useState(false);
+
+  const saveBookId = (bookId) => {
+    localStorage.setItem('selectedBookId', bookId);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -20,10 +25,12 @@ const ListBookByUser  = () => {
       setLoading(false);
     };
     fetchData();
-
   }, []);
 
-
+  const handleCategoryButtonClick = (bookId) => {
+    saveBookId(bookId); // Fixed function call
+    navigate('/bookDetail');
+  };
 
   return (
     <>
@@ -31,22 +38,28 @@ const ListBookByUser  = () => {
         {!loading && (
           <div className="grid grid-cols-6 gap-6 justify-evenly">
             {books.map((book) => (
-              <div className="max-width: 144px">
-                <a href="https://www.w3schools.com?">
+              <div className="max-width: 144px" key={book.bookId}> {/* Added key prop */}
                 <div className="content-center">
-                <img style={{width: "144px",height: "200px"}} src={"images/" + book.coverPath} alt="Girl in a jacket" />
-                <p>{book.title}</p>
-                <a href={"http://localhost:3000/images/"+book.pdfPath}>PDF</a> 
+                  <a href={"http://localhost:3000/bookDetail"}>
+                    <div onClick={() => handleCategoryButtonClick(book.bookId)}>
+                      <img
+                        style={{ width: "144px", height: "200px" }}
+                        src={"images/" + book.coverPath}
+                        alt="Girl in a jacket"
+                      />
+                      <p>{book.title}</p>
+                    </div>
+                  </a>
+                  <a href={"http://localhost:3000/images/" + book.pdfPath}>
+                    PDF
+                  </a>
                 </div>
-                </a>
               </div>
             ))}
           </div>
         )}
-
-
       </div>
     </>
-  )
-}
-export default ListBookByUser
+  );
+};
+export default ListBookByUser;

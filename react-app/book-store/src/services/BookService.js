@@ -15,6 +15,9 @@ class BookService {
     getBookByUserName(){
         return axios.get(BOOK_API_BASE_URL_USER);
     }
+    getBookByBookId() {
+        return axios.get("http://localhost:9999/book/bookDetail/" + localStorage.getItem('selectedBookId'))
+    } 
 }
 
 export default new BookService();

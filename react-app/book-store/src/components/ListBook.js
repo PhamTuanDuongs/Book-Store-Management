@@ -33,7 +33,7 @@ const ListBook = () => {
                 <div className="content-center">
                 <img style={{width: "144px",height: "200px"}} src={"images/" + book.coverPath} alt="Girl in a jacket" />
                 <p>{book.title}</p>
-                <a href={"http://localhost:3000/images/"+book.pdfPath}>PDF</a> 
+                <a href={"http://localhost:3000>/images/"+book.pdfPath}>PDF</a> 
                 </div>
                 </a>
               </div>
