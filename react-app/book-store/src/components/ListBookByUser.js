@@ -44,7 +44,7 @@ const ListBookByUser = () => {
                     <div onClick={() => handleCategoryButtonClick(book.bookId)}>
                       <img
                         style={{ width: "144px", height: "200px" }}
-                        src={"images/" + book.coverPath}
+                        src={"http://localhost:3000/images/" + book.coverPath}
                         alt="Girl in a jacket"
                       />
                       <p>{book.title}</p>
