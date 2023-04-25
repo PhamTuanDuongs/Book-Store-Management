@@ -38,7 +38,7 @@ public class BookController {
         return list;
     }
 
-     @RequestMapping(value = "book/user/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "book/user/{username}", method = RequestMethod.GET)
      public List<Book> getByUser(@PathVariable String username) {
          List<Book> books = bookRepository.findByUsername(username);
          return books;
@@ -48,6 +48,12 @@ public class BookController {
     public List<Book> getByCategory(@PathVariable int categoryId) {
         List<Book> books = bookRepository.getByCategoryId(categoryId);
         return books;
+    }
+    
+    @RequestMapping(value = "book/bookDetail/{bookId}", method = RequestMethod.GET)
+    public Book getByBookId(@PathVariable int bookId) {
+        Book book = bookRepository.getByBookId(bookId);
+        return book;
     }
 }
 

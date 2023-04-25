@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BookService from '../services/BookService';
-import { useNavigate } from 'react-router-dom';
+
 const ListBook = () => {
   const [loading, setLoading] = useState('');
   const [books, setBooks] = useState([]);
@@ -18,13 +18,12 @@ const ListBook = () => {
       setLoading(false);
     };
     fetchData();
-
   }, []);
   console.log(search)
   return (
     <>
-
       <div className="container mx-auto px-4 mt-10">
+
 <form class="flex items-center">   
     <label for="simple-search" class="sr-only">Search</label>
     <div class="relative w-full">
@@ -41,22 +40,22 @@ const ListBook = () => {
             {books.filter((book) => {
               return search.toLowerCase() === '' ? book : book.title.toLowerCase().includes(search);
             }).map((book) => (
+
               <div className="max-width: 144px" key={book.id}>
                 <a href="https://www.w3schools.com?">
-                <div className="content-center">
-                <img style={{width: "144px",height: "200px"}} src={"images/" + book.coverPath} alt="Girl in a jacket" />
-                <p>{book.title}</p>
-                <a href={"http://localhost:3000/images/"+book.pdfPath}>PDF</a> 
-                </div>
+                  <div className="content-center">
+                    <img style={{ width: "144px", height: "200px" }} src={"http://localhost:3000/images/" + book.coverPath} alt="Girl in a jacket" />
+                    <p>{book.title}</p>
+                    <p>{book.approved}</p>
+                    <a href={"http://localhost:3000/images/" + book.pdfPath}>PDF</a>
+                  </div>
                 </a>
               </div>
             ))}
           </div>
         )}
-
-
       </div>
     </>
   )
 }
-export default ListBook
+export default ListBook;
