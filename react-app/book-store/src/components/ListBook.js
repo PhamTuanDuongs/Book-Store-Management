@@ -19,7 +19,7 @@ const ListBook = () => {
     };
     fetchData();
   }, []);
-  console.log(search)
+  console.log(search.toLowerCase())
   return (
     <>
       <div className="container mx-auto px-4 mt-10">
@@ -38,7 +38,7 @@ const ListBook = () => {
         {!loading && (
           <div className="grid grid-cols-6 gap-6 justify-evenly">
             {books.filter((book) => {
-              return search.toLowerCase() === '' ? book : book.title.toLowerCase().includes(search);
+              return search.trim() === '' ? book : book.title.toLowerCase().includes(search.toLowerCase());              
             }).map((book) => (
 
               <div className="max-width: 144px" key={book.id}>
