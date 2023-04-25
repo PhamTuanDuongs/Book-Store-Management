@@ -12,6 +12,7 @@ import com.store.book.repository.RoleRepository;
 import com.store.book.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,17 +36,18 @@ public class UserController {
     @GetMapping
     public List<User> getAllFeature() {
         return userRepository.findAll();
-    }    
+    }
+
     @GetMapping("/login/{user}")
     User getUser(@PathVariable String user) {
-        if(userRepository.findByUsername(user)!=null){
+        if (userRepository.findByUsername(user) != null) {
             return userRepository.findByUsername(user);
-        }else{
+        } else {
             return null;
         }
     }
-    
-       @PostMapping("/login")
+
+    @PostMapping("/login")
     User loginUser(@RequestBody User user) {
         User foundUser = userRepository.findByUsername(user.getUsername());
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
@@ -55,5 +57,18 @@ public class UserController {
         }
     }
 
-        
+    @PostMapping(value = "/update")
+    public ResponseEntity<String> updateUserInformation(@RequestBody User user) {
+        User temp = userRepository.findByUsername(user.getUsername());
+        if (temp == null) {
+            return ResponseEntity.notFound().build();
+        }
+        temp.setPassword(user.getPassword());
+        temp.setDisplayName(user.getDisplayName());
+        temp.setDob(user.getDob());
+        temp.setEmail(user.getEmail());
+        userRepository.save(temp);
+        return ResponseEntity.ok("User information updated successfully");
+    }
+
 }
