@@ -33,13 +33,13 @@ function Login() {
           }
         })
         .catch((err) => {
-          setNotification(`Login failed due to: ${err.message}`);
+          setNotification(`Login failed`);
         });
     }
   };
 
   const onCustomButtonClick = () => {
-    navigate('/home');
+    navigate('/homepage');
   };
 
   const validate = () => {
