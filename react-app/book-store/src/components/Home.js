@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import CategoryService from '../services/CategoryService';
 
 import '../css/Home.css'
-
 const Home = () => {
     //List book
     const [loading, setLoading] = useState('');
@@ -21,7 +20,6 @@ const Home = () => {
             setLoading(false);
         };
         fetchData();
-
     }, []);
     //List Category
     const navigate = useNavigate();
@@ -64,7 +62,6 @@ const Home = () => {
                     Category
                 </summary> */}
                         <div class="dropdown-content">
-
                             {!loading1 && (
                                 <div className="grid grid-cols-6 gap-6 justify-evenly">
                                     {category.map((category) => (
