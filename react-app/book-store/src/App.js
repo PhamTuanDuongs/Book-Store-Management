@@ -43,7 +43,8 @@ function App() {
         <Route path="/listBookByCategory" element={<ListBookByCategory />}></Route>
         <Route path="/category" element={<ListCategory />}></Route>
         <Route path="/user" element={<Profile />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/login" element={<Login />}></Route
+        {/* <Route path="/bookDetail" element={<BookByBookId />}></Route> */}
         <Route path="/bookDetail" element={<BookByBookId />}></Route>
       </Routes>
     </BrowserRouter>
