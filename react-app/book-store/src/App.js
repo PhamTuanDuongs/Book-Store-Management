@@ -17,8 +17,6 @@ function App() {
         <Route index element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/homepage" element={<Home />} />
-        <Route path="/user/setting" element={<AccountSetting />} />
-
         {userRole === 'Super Admin' && (
           <>
             <Route path="/book/view" element={<ListBook />} />
@@ -27,6 +25,7 @@ function App() {
             <Route path="/admin/user" element={<ListUsers />} />
             <Route path="/user/setting" element={<AccountSetting />} />
             <Route path="/homepage" element={<Home />} />
+            <Route path="/bookdetail" element={<BookByBookId />} />
 
           </>
         )}
@@ -40,6 +39,8 @@ function App() {
             <Route path="/admin/user" element={<ListUsers />} />
             <Route path="/user/setting" element={<AccountSetting />} />
             <Route path="/homepage" element={<Home />} />
+            <Route path="/listBookByCategory" element={<ListBookByCategory />} />
+
 
           </>
         )}

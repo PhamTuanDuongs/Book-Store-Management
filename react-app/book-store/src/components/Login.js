@@ -4,45 +4,57 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [notification, setNotification] = useState('');
   const navigate = useNavigate();
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+
+  const proceedLogin = (e) => {
     e.preventDefault();
-    if (validateInputs()) {
-      fetch(`http://localhost:9999/users/login/${username}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (Object.keys(data).length === 0) {
-            toast.error("Please enter a valid username.");
-          } else if (data.password !== password) {
-            toast.error("Please enter a valid password.");
+    if (validate()) {
+      fetch('http://localhost:9999/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((resp) => {
+          if (Object.keys(resp).length === 0) {
+            setNotification('Please enter valid credentials');
           } else {
-            toast.success("Successfully logged in!");
-            sessionStorage.setItem("pageView", username);
-            navigate("/homepage");
+            setNotification('Login successful!');
+            sessionStorage.setItem('pageView', resp.username);
+            sessionStorage.setItem('role', JSON.stringify(resp.roles[0].roleName));
+            onCustomButtonClick();
           }
         })
         .catch((err) => {
-          toast.error(`Login failed due to: ${err.message}`);
+          setNotification(`Incorrect username or password. Please try again.`);
         });
     }
   };
 
-  // Validate input fields
-  const validateInputs = () => {
-    let isValid = true;
-    if (!username.trim()) {
-      toast.warning("Please enter your username.");
-      isValid = false;
+  const onCustomButtonClick = () => {
+    navigate('/homepage');
+  };
+
+  const validate = () => {
+    let result = true;
+    if (username === '' || username === null) {
+      result = false;
+      setNotification('Please enter username');
     }
-    if (!password.trim()) {
-      toast.warning("Please enter your password.");
-      isValid = false;
+    if (password === '' || password === null) {
+      result = false;
+      setNotification('Please enter password');
     }
-    return isValid;
+    return result;
   };
 
   return (
@@ -53,9 +65,16 @@ function Login() {
         </h2>
       </div>
 
+
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          {notification !== '' && (
+            <div className='p-3 mb-3 text-red-800 rounded-md'>
+              {notification}
+            </div>
+          )}
+          <form className="space-y-6" onSubmit={proceedLogin}>
             <div>
               <label
                 htmlFor="username"
@@ -112,6 +131,7 @@ function Login() {
         </div>
       </div>
     </div>
+
   );
 }
 
