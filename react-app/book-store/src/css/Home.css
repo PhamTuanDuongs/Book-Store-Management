@@ -4,7 +4,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: darkgreen;
   position: -webkit-sticky;
   /* Safari */
   width: 100;
@@ -17,11 +17,11 @@ li1 {
 
 li1 a {
   display: block;
-  color: white;
+  /* color: black; */
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  background-color: dodgerblue;
+  background-color: white;
 }
 
 body {
@@ -149,6 +149,7 @@ li a:hover {
   /* position: fixed; */
   top: 0;
   width: 100%;
+  border-bottom: solid 1px darkgreen;
 }
 
 .content {

@@ -30,7 +30,7 @@ const BookByBookId = () => {
               <img
                 src={"images/" + book.coverPath}
                 alt="Book cover"
-                className="w-92 h-110 rounded-lg shadow-lg object-cover"
+                className="rounded-lg shadow-lg h-[400px] w-[300px]"
               />
             </div>
             <div className="w-full md:w-1/2">

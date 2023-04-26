@@ -4,8 +4,16 @@ import { useNavigate } from "react-router-dom";
 const ListBook = () => {
   const [loading, setLoading] = useState("");
   const [books, setBooks] = useState([]);
-  const [search, setSearch] = useState('');
-  var pageView = sessionStorage.getItem("pageView");
+  const [isApproved, setIsApproved] = useState(null); // State to store the current status of the button
+  const navigate = useNavigate();
+  const [sorted, setSorted] = useState(false);
+  const [reverse, setReverse] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const saveBookId = (bookId) => {
+    localStorage.setItem("selectedBookId", bookId);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -19,39 +27,112 @@ const ListBook = () => {
     };
     fetchData();
   }, []);
-  console.log(search.toLowerCase())
+
+  const handleBookButtonClick = (bookId) => {
+    saveBookId(bookId);
+  };
+
+  const approveBook = async (bookId) => {
+    try {
+      await BookService.approveBook(bookId); // Call an API to update the book's isApproved attribute to 1
+      // setBooks((prevState) =>
+      //   prevState.map((book) =>
+      //     book.id === bookId ? { ...book, isApproved: 1 } : book
+      //   )
+      // ); // Update the state of books to reflect the change
+      setAlertMessage("Approved"); // Set alert message
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const denyBook = async (bookId) => {
+    try {
+      await BookService.denyBook(bookId); // Call an API to delete the book from the database
+      //setBooks((prevState) => prevState.filter((book) => book.id !== bookId)); // Remove the book from the state of books
+      setAlertMessage("Deleted"); // Set alert message
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSort = () => {
+    let sortedBooks;
+    if (!sorted) {
+      // Sort ascending order
+      sortedBooks = [...books].sort((a, b) => a.isApproved - b.isApproved);
+    } else {
+      // Toggle sorting order
+      sortedBooks = [...books].reverse();
+      setReverse(!reverse);
+    }
+    setSorted(true);
+    setBooks(sortedBooks);
+  };
+
+  const renderBooks = (books) => {
+    return (
+      <div className="grid grid-cols-6 gap-6 justify-evenly">
+        {books.map((book) => (
+          <div className="max-width: 144px" key={book.id}>
+            <div className="content-center">
+              <a href="/bookdetail">
+                <div onClick={() => handleBookButtonClick(book.bookId)}>
+                  <img
+                    style={{ width: "144px", height: "200px" }}
+                    src={"http://localhost:3000/images/" + book.coverPath}
+                    alt="Girl in a jacket"
+                  />
+                </div>
+              </a>
+              {book.isApproved ? (
+                <span className="inline-flex items-center bg-green-500 text-white rounded-full py-1 px-3 mt-4">
+                  Public
+                </span>
+              ) : (
+                <div onClick={() => handleBookButtonClick(book.bookId)}>
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mt-4"
+                    onClick={() => approveBook(book.id)}
+                  >
+                    Accept
+                  </button>
+
+                  <button
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-4"
+                    onClick={() => denyBook(book.id)}
+                  >
+                    Deny
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 mt-10">
-
-<form class="flex items-center">   
-    <label for="simple-search" class="sr-only">Search</label>
-    <div class="relative w-full">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-        </div>
-        <input onChange={(e) => setSearch(e.target.value)} type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required/>
-    </div>
-    
-</form>
-
-        {!loading && (
-          <div className="grid grid-cols-6 gap-6 justify-evenly">
-            {books.filter((book) => {
-              return search.trim() === '' ? book : book.title.toLowerCase().includes(search.toLowerCase());              
-            }).map((book) => (
-
-              <div className="max-width: 144px" key={book.id}>
-                <a href="https://www.w3schools.com?">
-                  <div className="content-center">
-                    <img style={{ width: "144px", height: "200px" }} src={"http://localhost:3000/images/" + book.coverPath} alt="Girl in a jacket" />
-                    <p>{book.title}</p>
-                    <p>{book.approved}</p>
-                    <a href={"http://localhost:3000/images/" + book.pdfPath}>PDF</a>
-                  </div>
-                </a>
-              </div>
-            ))}
+        {alertMessage && (
+          <div
+            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+            role="alert"
+          >
+            <span className="block sm:inline">{alertMessage}!</span>
+            <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+              <svg
+                className="fill-current h-6 w-6 text-green-500"
+                role="button"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <title>Close</title>
+                <path d="M14.348 5.652a1 1 0 00-1.414 0L10 8.586 6.066 4.652a1 1 0 00-1.414 1.414L8.586 10l-3.934 3.934a1 1 0 101.414 1.414L10 11.414l3.934 3.934a1 1 0 001.414-1.414L11.414 10l3.934-3.934a1 1 0 000-1.414z" />
+              </svg>
+            </span>
           </div>
         )}
         <button

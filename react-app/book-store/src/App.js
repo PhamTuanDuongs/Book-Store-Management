@@ -32,7 +32,7 @@ function App() {
         {userRole === 'Admin' && (
           <>
             <Route path="/bookdetail" element={<BookByBookId />} />
-            <Route path="/listBook" element={<ListBook />} />
+            <Route path="/admin/book" element={<ListBook />} />
             <Route path="/book/view" element={<ListBookByUser />} />
             <Route path="/category" element={<ListCategory />} />
             <Route path="/user" element={<Profile />} />
