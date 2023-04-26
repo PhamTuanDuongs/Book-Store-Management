@@ -1,105 +1,115 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [notification, setNotification] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-
-  const proceedLogin = (e) => {
+  // Handle form submission
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) {
-      fetch('http://localhost:9999/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then((resp) => {
-          if (Object.keys(resp).length === 0) {
-            setNotification('Please enter valid credentials');
+    if (validateInputs()) {
+      fetch(`http://localhost:9999/users/login/${username}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (Object.keys(data).length === 0) {
+            toast.error("Please enter a valid username.");
+          } else if (data.password !== password) {
+            toast.error("Please enter a valid password.");
           } else {
-            setNotification('Login successful!');
-            sessionStorage.setItem('pageView', resp.username);
-            sessionStorage.setItem('role', JSON.stringify(resp.roles[0].roleName));
-            onCustomButtonClick();
+            toast.success("Successfully logged in!");
+            sessionStorage.setItem("pageView", username);
+            navigate("/homepage");
           }
         })
         .catch((err) => {
-          setNotification(`Login failed`);
+          toast.error(`Login failed due to: ${err.message}`);
         });
     }
   };
 
-  const onCustomButtonClick = () => {
-    navigate('/homepage');
-  };
-
-  const validate = () => {
-    let result = true;
-    if (username === '' || username === null) {
-      result = false;
-      setNotification('Please enter username');
+  // Validate input fields
+  const validateInputs = () => {
+    let isValid = true;
+    if (!username.trim()) {
+      toast.warning("Please enter your username.");
+      isValid = false;
     }
-    if (password === '' || password === null) {
-      result = false;
-      setNotification('Please enter password');
+    if (!password.trim()) {
+      toast.warning("Please enter your password.");
+      isValid = false;
     }
-    return result;
+    return isValid;
   };
 
   return (
-    <div className='h-screen flex bg-gray-bg1'>
-      <div className='w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16'>
-        <h1 className='text-2xl font-medium text-primary mt-4 mb-12 text-center'>
-          Log in to your account 🔐
-        </h1>
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-purple-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          Sign in to your account
+        </h2>
+      </div>
 
-        {notification !== '' && (
-          <div className='bg-red-200 p-3 mb-3 text-red-800 rounded-md'>
-            {notification}
-          </div>
-        )}
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
+              <div className="mt-1">
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  placeholder="Username"
+                />
+              </div>
+            </div>
 
-        <form onSubmit={proceedLogin}>
-          <div>
-            <label htmlFor='email'>Email</label>
-            <input
-              onChange={(e) => setUsername(e.target.value)}
-              type='text'
-              className={`w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4`}
-              id='text'
-              required
-              placeholder='Your username'
-            />
-          </div>
-          <div>
-            <label htmlFor='password'>Password</label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              type='password'
-              className={`w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4`}
-              id='password'
-              required
-              placeholder='Your Password'
-            />
-          </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  placeholder="Password"
+                />
+              </div>
+            </div>
 
-          <div className='flex justify-center items-center mt-6'>
-            <button
-              className={`bg-green py-2 px-4 text-sm text-black rounded border border-green focus:outline-none focus:border-green-dark`}
-            >
-              Login
-            </button>
-          </div>
-        </form>
+            <div>
+              <button
+                type="submit"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              >
+                Sign in
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

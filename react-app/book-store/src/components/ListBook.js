@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import BookService from '../services/BookService';
-
+import React, { useEffect, useState } from "react";
+import BookService from "../services/BookService";
+import { useNavigate } from "react-router-dom";
 const ListBook = () => {
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState("");
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState('');
   var pageView = sessionStorage.getItem("pageView");
@@ -54,8 +54,23 @@ const ListBook = () => {
             ))}
           </div>
         )}
+        <button
+          onClick={handleSort}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4"
+        >
+          Sort
+        </button>
+        {!loading &&
+          renderBooks(
+            sorted
+              ? reverse
+                ? books.reverse()
+                : [...books].sort((a, b) => a.isApproved - b.isApproved)
+              : books
+          )}
       </div>
     </>
-  )
-}
+  );
+};
+
 export default ListBook;
