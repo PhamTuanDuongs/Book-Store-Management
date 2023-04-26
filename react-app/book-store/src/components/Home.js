@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BookService from '../services/BookService';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CategoryService from '../services/CategoryService';
 
 import '../css/Home.css'
@@ -59,14 +59,17 @@ const Home = () => {
     const approvedBooks = books.filter((book) => book.isApproved === 1);
     return (
         //Menu Bar
+        
+        
         <>
-            <ul>
-                <li><a class="active" href="/homepage">Home</a></li>
+            <ul class="nav nav-bar">
+                <li><a href='/homepage' class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+  Home</a></li>
                 {/* Category choose Bar */}
                 <li>
                     <li class="dropdown">
-                        <button class="dropbtn">Category
-                        </button>
+                    <button class="btn dropbtn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+  Category</button>
                         {/* <details class="dropbtn" >
                 <summary>
                     Category
@@ -75,7 +78,7 @@ const Home = () => {
                             {!loading1 && (
                                 <div className="grid grid-cols-6 gap-6 justify-evenly">
                                     {category.map((category) => (
-                                        <a key={category.categoryId} onClick={() => handleCategoryButtonClick(category.categoryId)}>
+                                        <a class="btn-dropdown" key={category.categoryId} onClick={() => handleCategoryButtonClick(category.categoryId)}>
                                             {category.categoryName}
                                         </a>
                                     ))}
@@ -89,30 +92,35 @@ const Home = () => {
                 {/* Login button */}
                 <li>
                     <liv class="mt-12">
-                        <input onChange={(e) => setSearch(e.target.value)} type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+                        <input onChange={(e) => setSearch(e.target.value)} type="text" id="simple-search" class="btn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
                     </liv>
                 </li>
                 {isLoggedIn ? (
                     // Hiển thị nội dung khi session tồn tại
-                    <div>
-                        <p>Welcome, user!</p>
-                        <li1 onClick={handleLogout}><a href="/login" >Logout</a></li1>
-                        <li1><a href="/user/setting" >Profile</a></li1>
+                    <div >
+                        <li1 onClick={handleLogout} ><button class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+  Logout</button></li1>
+                        <li1><a href='/user' class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+  Profile</a></li1>
+                        <li1><a href='/book/view' class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+  My Book</a></li1>
                     </div>
                 ) : (
                     // Hiển thị nội dung khi session không tồn tại
-                    <li1><a href="/login" >Login</a></li1>
+                    
+                    <li1><a class="btn" href="/login" >Login</a></li1>
+                    
                 )}
                 
             </ul>
             {/* View book */}
-            <div id="test-body-mobile" className="contentBody">
+            <div id="test-body-mobile" className="contentBody" class="content">
                 {!loading && (
 
                     <div className="grid grid-cols-4 gap-6 justify-evenly" id="contentBody">
 
                         {approvedBooks.filter((book) => {
-                            return search.toLowerCase() === '' ? book : book.title.toLowerCase().includes(search);
+                            return search.trim() === '' ? book : book.title.toLowerCase().includes(search.toLowerCase());
                         }).map((book) => (
 
                             <div className="max-width: 144px" key={book.id}>
