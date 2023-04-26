@@ -9,6 +9,7 @@ import Profile from './components/Profile';
 import BookByBookId from './components/BookByBookId';
 import ListUsers from './components/SuperAdmin/ListUsers'
 import AccountSetting from './components/Account/AccountSetting'
+import AddBook from './components/Account/AddBook'
 function App() {
   const userRole = JSON.parse(sessionStorage.getItem('role'));
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/homepage" element={<Home />} />
         <Route path="/user/setting" element={<AccountSetting  />}/>
+        <Route path="/book/add" element={<AddBook  />}/>
+
 
         {userRole === 'Super Admin' && (
           <>
