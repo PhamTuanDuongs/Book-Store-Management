@@ -14,9 +14,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route index element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/homepage" element={<Home />} />
-        <Route path="/user/setting" element={<AccountSetting  />}/>
+        <Route path="/user/setting" element={<AccountSetting />} />
 
         {userRole === 'Super Admin' && (
           <>
@@ -24,6 +25,8 @@ function App() {
             <Route path="/listBookByCategory" element={<ListBookByCategory />} />
             <Route path="/user" element={<Profile />} />
             <Route path="/admin/user" element={<ListUsers />} />
+            <Route path="/user/setting" element={<AccountSetting />} />
+            <Route path="/homepage" element={<Home />} />
 
           </>
         )}
@@ -34,6 +37,9 @@ function App() {
             <Route path="/book/view" element={<ListBookByUser />} />
             <Route path="/category" element={<ListCategory />} />
             <Route path="/user" element={<Profile />} />
+            <Route path="/admin/user" element={<ListUsers />} />
+            <Route path="/user/setting" element={<AccountSetting />} />
+            <Route path="/homepage" element={<Home />} />
 
           </>
         )}
@@ -42,6 +48,11 @@ function App() {
             <Route path="/listBook" element={<ListBook />} />
             <Route path="/listBookByCategory" element={<ListBookByCategory />} />
             <Route path="/user" element={<Profile />} />
+            <Route path="/book/view" element={<ListBookByUser />} />
+            <Route path="/bookdetail" element={<BookByBookId />} />
+            <Route path="/user/setting" element={<AccountSetting />} />
+            <Route path="/homepage" element={<Home />} />
+
           </>
         )}
         <Route path="*" element={<AccessDenied />} />
