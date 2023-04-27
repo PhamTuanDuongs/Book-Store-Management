@@ -45,7 +45,7 @@ const BookByBookId = () => {
               </p>
               <div className="flex flex-col md:flex-row gap-4 items-center">
                 <a
-                  href={"http://localhost:3000/images/" + book.pdfPath}
+                  href={"http://localhost:9999/pdf/" + book.pdfPath}
                   className="inline-flex items-center bg-blue-500 hover:bg-blue-700 text-white rounded-md py-2 px-4 text-lg font-medium"
                 >
                   Read PDF

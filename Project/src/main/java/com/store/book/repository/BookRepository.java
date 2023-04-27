@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author nhat
  */
 public interface BookRepository extends JpaRepository<Book, Integer> {
+//    Book findBookByUsername(String username);
 
     @Query(value = "select * from Book join User on Book.createdBy = User.username where User.username = ?", nativeQuery = true)
     List<Book> findByUsername(String username);

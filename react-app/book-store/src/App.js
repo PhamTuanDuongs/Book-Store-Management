@@ -9,6 +9,8 @@ import Profile from './components/Profile';
 import BookByBookId from './components/BookByBookId';
 import ListUsers from './components/SuperAdmin/ListUsers'
 import AccountSetting from './components/Account/AccountSetting'
+import AccountRegister from './components/Account/AccountRegister'
+
 function App() {
   const userRole = JSON.parse(sessionStorage.getItem('role'));
   return (
@@ -17,9 +19,12 @@ function App() {
         <Route index element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/homepage" element={<Home />} />
-        {userRole === 'Super Admin' && (
+        <Route path="/register" element={<AccountRegister/>} />
+
+        {/* {userRole === 'Super Admin' && ( */}
           <>
-            <Route path="/book/view" element={<ListBook />} />
+            <Route path="/admin/book" element={<ListBook />} />
+            <Route path="/book/view" element={<ListBookByUser />} />
             <Route path="/listBookByCategory" element={<ListBookByCategory />} />
             <Route path="/user" element={<Profile />} />
             <Route path="/admin/user" element={<ListUsers />} />
@@ -28,8 +33,8 @@ function App() {
             <Route path="/bookdetail" element={<BookByBookId />} />
 
           </>
-        )}
-        {userRole === 'Admin' && (
+        {/* )} */}
+        {/* {userRole === 'Admin' && ( */}
           <>
             <Route path="/bookdetail" element={<BookByBookId />} />
             <Route path="/admin/book" element={<ListBook />} />
@@ -40,11 +45,9 @@ function App() {
             <Route path="/user/setting" element={<AccountSetting />} />
             <Route path="/homepage" element={<Home />} />
             <Route path="/listBookByCategory" element={<ListBookByCategory />} />
-
-
           </>
-        )}
-        {userRole === 'User' && (
+        {/* )} */}
+        {/* {userRole === 'User' && ( */}
           <>
             <Route path="/listBook" element={<ListBook />} />
             <Route path="/listBookByCategory" element={<ListBookByCategory />} />
@@ -53,10 +56,9 @@ function App() {
             <Route path="/bookdetail" element={<BookByBookId />} />
             <Route path="/user/setting" element={<AccountSetting />} />
             <Route path="/homepage" element={<Home />} />
-
           </>
-        )}
-        <Route path="*" element={<AccessDenied />} />
+        {/* )} */}
+        {/* <Route path="*" element={<AccessDenied />} /> */}
       </Routes>
     </BrowserRouter>
   );

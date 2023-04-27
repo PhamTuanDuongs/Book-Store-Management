@@ -126,14 +126,14 @@ const ListBookByUser = () => {
           // Hiển thị nội dung khi session tồn tại
           <div>
             <li1 onClick={handleLogout}>
-              <button class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent ">
+            <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
                 Logout
               </button>
             </li1>
             <li1>
               <a
                 href="/user"
-                class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent "
+                class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent "
               >
                 Profile
               </a>
@@ -141,7 +141,7 @@ const ListBookByUser = () => {
             <li1>
               <a
                 href="/book/view"
-                class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent "
+                class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent "
               >
                 My Book
               </a>

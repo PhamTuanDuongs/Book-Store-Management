@@ -26,7 +26,7 @@ function User() {
           <div className="p-8 bg-gray-100">
             <h1 className="text-5xl font-bold mb-8 mt-2 text-center">Profile</h1>
             <div className="flex items-center mb-6">
-              <img className="w-40 h-50 object-cover rounded-full mr-6" src={"images/avatar/" + user.avatarPath} alt="User Avatar" />
+              <img className="w-40 h-50 object-cover rounded-full mr-6" src={"http://localhost:9999/users/avatar/" + user.avatarPath} alt="User Avatar" />
               <div>
                 <p className="text-3xl font-bold mb-2 text-gray-800">{user.displayName}</p>
                 <p className="text-xl mb-6 text-gray-700">{user.email}</p>

@@ -178,7 +178,7 @@ const Home = () => {
                     >
                       <img
                         style={{ width: "144px", height: "200px" }}
-                        src={"http://localhost:3000/images/" + book.coverPath}
+                        src={"http://localhost:9999/cover/" + book.coverPath}
                         alt="Girl in a jacket"
                         className="mx-auto"
                       />
@@ -186,7 +186,7 @@ const Home = () => {
                     </div>
                   </a>
                   <a
-                    href={"http://localhost:3000/images/" + book.pdfPath}
+                    href={"http://localhost:9999/pdf/" + book.pdfPath}
                     className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500 mx-auto"
                     style={{ width: "60%" }}
                   >

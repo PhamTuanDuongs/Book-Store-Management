@@ -32,25 +32,38 @@ const ListBook = () => {
     saveBookId(bookId);
   };
 
+  // const approveBook = async (bookId) => {
+  //   try {
+  //     await BookService.approveBook(bookId); // Call an API to update the book's isApproved attribute to 1
+  //     // setBooks((prevState) =>
+  //     //   prevState.map((book) =>
+  //     //     book.id === bookId ? { ...book, isApproved: 1 } : book
+  //     //   )
+  //     // ); // Update the state of books to reflect the change
+  //     setAlertMessage("Approved"); // Set alert message
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const approveBook = async (bookId) => {
     try {
-      await BookService.approveBook(bookId); // Call an API to update the book's isApproved attribute to 1
-      // setBooks((prevState) =>
-      //   prevState.map((book) =>
-      //     book.id === bookId ? { ...book, isApproved: 1 } : book
-      //   )
-      // ); // Update the state of books to reflect the change
-      setAlertMessage("Approved"); // Set alert message
+        setLoading(true);
+        const updatedUser = {
+            bookId: bookId,
+        };
+        const response = await BookService.updateBook(updatedUser);
+        window.location.reload();
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
+
 
   const denyBook = async (bookId) => {
     try {
       await BookService.denyBook(bookId); // Call an API to delete the book from the database
-      //setBooks((prevState) => prevState.filter((book) => book.id !== bookId)); // Remove the book from the state of books
-      setAlertMessage("Deleted"); // Set alert message
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -93,14 +106,14 @@ const ListBook = () => {
                 <div onClick={() => handleBookButtonClick(book.bookId)}>
                   <button
                     className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mt-4"
-                    onClick={() => approveBook(book.id)}
+                    onClick={() => approveBook(book.bookId)}
                   >
                     Accept
                   </button>
 
                   <button
                     className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-4"
-                    onClick={() => denyBook(book.id)}
+                    onClick={() => denyBook(book.bookId)}
                   >
                     Deny
                   </button>
