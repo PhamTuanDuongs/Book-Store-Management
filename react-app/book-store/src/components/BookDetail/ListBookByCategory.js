@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import BookService from "../services/BookService";
-import { Link, useNavigate } from "react-router-dom";
-import CategoryService from "../services/CategoryService";
+import BookService from "../../services/BookService";
+import { useNavigate } from "react-router-dom";
+import CategoryService from "../../services/CategoryService";
 
-import "../css/Home.css";
-const Home = () => {
-  //List book
+const ListBookByCategory = () => {
   const [loading, setLoading] = useState("");
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
@@ -14,7 +12,7 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await BookService.getBook();
+        const response = await BookService.getBookByCategory();
         setBooks(response.data);
       } catch (error) {
         console.log(error);
@@ -46,7 +44,11 @@ const Home = () => {
   }, []);
   const handleCategoryButtonClick = (categoryId) => {
     saveCategoryId(categoryId);
-    navigate("/listBookByCategory");
+    if (window.location.pathname !== "/listBookByCategory") {
+      window.location.href = "/listBookByCategory";
+    } else {
+      window.location.reload();
+    }
   };
   const handleLogout = () => {
     // Invalidate sessionStorage
@@ -66,8 +68,6 @@ const Home = () => {
   };
 
   return (
-    //Menu Bar
-
     <>
       <ul class="nav nav-bar">
         <li>
@@ -157,48 +157,35 @@ const Home = () => {
         )}
       </ul>
       {/* View book */}
-      <div id="test-body-mobile" className="contentBody" class="content">
+      <div className="container mx-auto px-4 mt-10">
         {!loading && (
-          <div
-            className="grid grid-cols-4 gap-6 justify-center"
-            id="contentBody"
-          >
-            {approvedBooks
-              .filter((book) => {
-                return search.trim() === ""
-                  ? book
-                  : book.title.toLowerCase().includes(search.toLowerCase());
-              })
-              .map((book) => (
-                <div className="max-width: 144pxw mt-4 mb-4" key={book.id}>
-                  <a href="/bookdetail">
-                    <div
-                      onClick={() => handleBookButtonClick(book.bookId)}
-                      className="text-center"
-                    >
+          <div className="grid grid-cols-6 gap-6 justify-evenly">
+            {approvedBooks.map((book) => (
+              <div className="max-width: 144px">
+                <a href="/bookdetail">
+                  <div onClick={() => handleBookButtonClick(book.bookId)}>
+                    <div className="content-center mx-auto">
                       <img
                         style={{ width: "144px", height: "200px" }}
                         src={"http://localhost:9999/cover/" + book.coverPath}
                         alt="Girl in a jacket"
-                        className="mx-auto"
                       />
-                      <p>{book.approved}</p>
                     </div>
-                  </a>
-                  <a
-                    href={"http://localhost:9999/pdf/" + book.pdfPath}
-                    className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500 mx-auto"
-                    style={{ width: "60%" }}
-                  >
-                    READ
-                  </a>
-                </div>
-              ))}
+                  </div>
+                </a>
+                <a
+                  href={"http://localhost:9999/pdf/" + book.pdfPath}
+                  className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500"
+                  style={{ width: "63%" }}
+                >
+                  READ
+                </a>
+              </div>
+            ))}
           </div>
         )}
       </div>
     </>
   );
 };
-
-export default Home;
+export default ListBookByCategory;

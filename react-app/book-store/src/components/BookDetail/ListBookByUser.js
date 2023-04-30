@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
-import BookService from "../services/BookService";
+import BookService from "../../services/BookService";
 import { useNavigate } from "react-router-dom";
-import CategoryService from "../services/CategoryService";
+import CategoryService from "../../services/CategoryService";
 
-const ListBookByCategory = () => {
-  const [loading, setLoading] = useState("");
+const ListBookByUser = () => {
+  const [loading, setLoading] = useState(false); // Change initial state to false
   const [books, setBooks] = useState([]);
+  const [navbar, setNavbar] = useState(false);
   const [search, setSearch] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const saveBookId = (bookId) => {
+    localStorage.setItem("selectedBookId", bookId);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await BookService.getBookByCategory();
+        const response = await BookService.getBookByUserName();
         setBooks(response.data);
       } catch (error) {
         console.log(error);
@@ -21,14 +27,13 @@ const ListBookByCategory = () => {
     };
     fetchData();
   }, []);
-  //List Category
+
   const navigate = useNavigate();
   const [loading1, setLoading1] = useState(false);
   const [category, setCategory] = useState([]);
   const saveCategoryId = (categoryId) => {
     localStorage.setItem("selectedCategoryId", categoryId);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading1(true);
@@ -42,14 +47,6 @@ const ListBookByCategory = () => {
     };
     fetchData();
   }, []);
-  const handleCategoryButtonClick = (categoryId) => {
-    saveCategoryId(categoryId);
-    if (window.location.pathname !== "/listBookByCategory") {
-      window.location.href = "/listBookByCategory";
-    } else {
-      window.location.reload();
-    }
-  };
   const handleLogout = () => {
     // Invalidate sessionStorage
     sessionStorage.clear();
@@ -58,13 +55,17 @@ const ListBookByCategory = () => {
     setIsLoggedIn(false);
   };
 
-  const approvedBooks = books.filter((book) => book.isApproved === 1);
-
-  const saveBookId = (bookId) => {
-    localStorage.setItem("selectedBookId", bookId);
-  };
   const handleBookButtonClick = (bookId) => {
     saveBookId(bookId);
+  };
+
+  const handleCategoryButtonClickCategory = (categoryId) => {
+    saveCategoryId(categoryId);
+    if (window.location.pathname !== "/listBookByCategory") {
+      window.location.href = "/listBookByCategory";
+    } else {
+      window.location.reload();
+    }
   };
 
   return (
@@ -96,7 +97,7 @@ const ListBookByCategory = () => {
                       class="btn-dropdown"
                       key={category.categoryId}
                       onClick={() =>
-                        handleCategoryButtonClick(category.categoryId)
+                        handleCategoryButtonClickCategory(category.categoryId)
                       }
                     >
                       {category.categoryName}
@@ -125,7 +126,7 @@ const ListBookByCategory = () => {
           // Hiển thị nội dung khi session tồn tại
           <div>
             <li1 onClick={handleLogout}>
-              <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
+            <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
                 Logout
               </button>
             </li1>
@@ -156,30 +157,31 @@ const ListBookByCategory = () => {
           </li1>
         )}
       </ul>
-      {/* View book */}
       <div className="container mx-auto px-4 mt-10">
         {!loading && (
           <div className="grid grid-cols-6 gap-6 justify-evenly">
-            {approvedBooks.map((book) => (
-              <div className="max-width: 144px">
-                <a href="/bookdetail">
-                  <div onClick={() => handleBookButtonClick(book.bookId)}>
-                    <div className="content-center mx-auto">
+            {books.map((book) => (
+              <div className="max-width: 144px" key={book.bookId}>
+                {" "}
+                {/* Added key prop */}
+                <div className="content-center mx-auto">
+                  <a href="/bookdetail">
+                    <div onClick={() => handleBookButtonClick(book.bookId)}>
                       <img
                         style={{ width: "144px", height: "200px" }}
-                        src={"images/" + book.coverPath}
+                        src={"http://localhost:9999/cover/" + book.coverPath}
                         alt="Girl in a jacket"
                       />
                     </div>
-                  </div>
-                </a>
-                <a
-                  href={"http://localhost:3000/images/" + book.pdfPath}
-                  className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500"
-                  style={{ width: "63%" }}
-                >
-                  READ
-                </a>
+                  </a>
+                  <a
+                    href={"http://localhost:9999/pdf/" + book.pdfPath}
+                    className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500"
+                    style={{ width: "63%" }}
+                  >
+                    READ
+                  </a>
+                </div>
               </div>
             ))}
           </div>
@@ -188,4 +190,4 @@ const ListBookByCategory = () => {
     </>
   );
 };
-export default ListBookByCategory;
+export default ListBookByUser;

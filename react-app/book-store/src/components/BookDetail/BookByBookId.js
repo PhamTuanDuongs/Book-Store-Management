@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BookService from "../services/BookService";
-
+import BookService from "../../services/BookService";
 const BookByBookId = () => {
   const [loading, setLoading] = useState(false);
   const [book, setBook] = useState(null);

@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import BookService from "../services/BookService";
-import { useNavigate } from "react-router-dom";
-import CategoryService from "../services/CategoryService";
+import BookService from "../../services/BookService";
+import { Link, useNavigate } from "react-router-dom";
+import CategoryService from "../../services/CategoryService";
 
-const ListBookByUser = () => {
-  const [loading, setLoading] = useState(false); // Change initial state to false
+import "./Home.css";
+const Home = () => {
+  //List book
+  const [loading, setLoading] = useState("");
   const [books, setBooks] = useState([]);
-  const [navbar, setNavbar] = useState(false);
   const [search, setSearch] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-
-  const saveBookId = (bookId) => {
-    localStorage.setItem("selectedBookId", bookId);
-  };
+  const session = sessionStorage.getItem("pageView");
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await BookService.getBookByUserName();
+        const response = await BookService.getBook();
         setBooks(response.data);
       } catch (error) {
         console.log(error);
@@ -27,13 +25,14 @@ const ListBookByUser = () => {
     };
     fetchData();
   }, []);
-
+  //List Category
   const navigate = useNavigate();
   const [loading1, setLoading1] = useState(false);
   const [category, setCategory] = useState([]);
   const saveCategoryId = (categoryId) => {
     localStorage.setItem("selectedCategoryId", categoryId);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading1(true);
@@ -47,6 +46,10 @@ const ListBookByUser = () => {
     };
     fetchData();
   }, []);
+  const handleCategoryButtonClick = (categoryId) => {
+    saveCategoryId(categoryId);
+    navigate("/listBookByCategory");
+  };
   const handleLogout = () => {
     // Invalidate sessionStorage
     sessionStorage.clear();
@@ -55,20 +58,18 @@ const ListBookByUser = () => {
     setIsLoggedIn(false);
   };
 
+  const approvedBooks = books.filter((book) => book.isApproved === 1);
+
+  const saveBookId = (bookId) => {
+    localStorage.setItem("selectedBookId", bookId);
+  };
   const handleBookButtonClick = (bookId) => {
     saveBookId(bookId);
   };
 
-  const handleCategoryButtonClickCategory = (categoryId) => {
-    saveCategoryId(categoryId);
-    if (window.location.pathname !== "/listBookByCategory") {
-      window.location.href = "/listBookByCategory";
-    } else {
-      window.location.reload();
-    }
-  };
-
   return (
+    //Menu Bar
+
     <>
       <ul class="nav nav-bar">
         <li>
@@ -97,7 +98,7 @@ const ListBookByUser = () => {
                       class="btn-dropdown"
                       key={category.categoryId}
                       onClick={() =>
-                        handleCategoryButtonClickCategory(category.categoryId)
+                        handleCategoryButtonClick(category.categoryId)
                       }
                     >
                       {category.categoryName}
@@ -122,11 +123,11 @@ const ListBookByUser = () => {
             />
           </liv>
         </li>
-        {isLoggedIn ? (
+        {isLoggedIn && session !== null? (
           // Hiển thị nội dung khi session tồn tại
           <div>
             <li1 onClick={handleLogout}>
-            <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
+              <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
                 Logout
               </button>
             </li1>
@@ -157,37 +158,49 @@ const ListBookByUser = () => {
           </li1>
         )}
       </ul>
-      <div className="container mx-auto px-4 mt-10">
+      {/* View book */}
+      <div id="test-body-mobile" className="contentBody" class="content">
         {!loading && (
-          <div className="grid grid-cols-6 gap-6 justify-evenly">
-            {books.map((book) => (
-              <div className="max-width: 144px" key={book.bookId}>
-                {" "}
-                {/* Added key prop */}
-                <div className="content-center mx-auto">
+          <div
+            className="grid grid-cols-4 gap-6 justify-center"
+            id="contentBody"
+          >
+            {approvedBooks
+              .filter((book) => {
+                return search.trim() === ""
+                  ? book
+                  : book.title.toLowerCase().includes(search.toLowerCase());
+              })
+              .map((book) => (
+                <div className="max-width: 144pxw mt-4 mb-4" key={book.id}>
                   <a href="/bookdetail">
-                    <div onClick={() => handleBookButtonClick(book.bookId)}>
+                    <div
+                      onClick={() => handleBookButtonClick(book.bookId)}
+                      className="text-center"
+                    >
                       <img
                         style={{ width: "144px", height: "200px" }}
-                        src={"http://localhost:3000/images/" + book.coverPath}
+                        src={"http://localhost:9999/cover/" + book.coverPath}
                         alt="Girl in a jacket"
+                        className="mx-auto"
                       />
+                      <p>{book.approved}</p>
                     </div>
                   </a>
                   <a
-                    href={"http://localhost:3000/images/" + book.pdfPath}
-                    className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500"
-                    style={{ width: "63%" }}
+                    href={"http://localhost:9999/pdf/" + book.pdfPath}
+                    className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500 mx-auto"
+                    style={{ width: "60%" }}
                   >
                     READ
                   </a>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>
     </>
   );
 };
-export default ListBookByUser;
+
+export default Home;

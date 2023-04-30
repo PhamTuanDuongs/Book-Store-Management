@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -127,6 +126,10 @@ function Login() {
                 Sign in
               </button>
             </div>
+            <p style={{textAlign:"center"}}>Not have an account? 
+            <a href="/register" style={{color: "#a855f7"}}
+            >  Sign Up Here</a>
+            </p>
           </form>
         </div>
       </div>

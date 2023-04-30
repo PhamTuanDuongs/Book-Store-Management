@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CategoryService from '../services/CategoryService';
+import CategoryService from '../../services/CategoryService';
 import { useNavigate } from 'react-router-dom';
 
 const ListCategory = () => {

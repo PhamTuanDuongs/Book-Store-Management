@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BookService from "../services/BookService";
+import BookService from "../../services/BookService";
 import { useNavigate } from "react-router-dom";
 const ListBook = () => {
   const [loading, setLoading] = useState("");
@@ -93,7 +93,7 @@ const ListBook = () => {
                 <div onClick={() => handleBookButtonClick(book.bookId)}>
                   <img
                     style={{ width: "144px", height: "200px" }}
-                    src={"http://localhost:3000/images/" + book.coverPath}
+                    src={"http://localhost:9999/cover/" + book.coverPath}
                     alt="Girl in a jacket"
                   />
                 </div>
