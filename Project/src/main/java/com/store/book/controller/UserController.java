@@ -10,10 +10,15 @@ import com.store.book.model.User;
 import com.store.book.repository.FeatureRepository;
 import com.store.book.repository.RoleRepository;
 import com.store.book.repository.UserRepository;
+import com.store.book.utils.DateTimeUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -29,7 +34,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -45,6 +52,9 @@ public class UserController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/avatar/";
+    private static final String DELETE_DIR = System.getProperty("user.dir") + "/avatar/";
 
     @GetMapping
     public List<User> getAllFeature() {
@@ -70,6 +80,36 @@ public class UserController {
         }
     }
 
+    @PostMapping("/avatar/update")
+    public void registerFile(@RequestParam("avatarPath") MultipartFile fileUpdate, @RequestParam("username") String username) {
+        User foundUser = userRepository.findByUsername(username);
+        String fileNameJPG = foundUser.getAvatarPath();
+        String jpgFilePath = DELETE_DIR+ fileNameJPG +".jpg";
+        File file = new File(jpgFilePath);
+        if (file.delete()) {
+            System.out.println("File " + jpgFilePath + " đã được xóa thành công.");
+        } else {
+            System.out.println("Xóa file " + jpgFilePath+ " thất bại.");
+        }
+        
+        String nameWithoutExtension = nameWithoutExtension(fileUpdate);
+        foundUser.setAvatarPath(nameWithoutExtension);
+        userRepository.save(foundUser);
+        if (fileUpdate != null) {
+                try {
+                    String filename = fileUpdate.getOriginalFilename();
+                    byte[] bytes = fileUpdate.getBytes();
+                    Path path = Paths.get(UPLOAD_DIR + filename);
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+         
+    }
+   
+    
+    
     @PostMapping(value = "/update")
     public ResponseEntity<String> updateUserInformation(@RequestBody User user) {
         User temp = userRepository.findByUsername(user.getUsername());
@@ -82,6 +122,12 @@ public class UserController {
         temp.setEmail(user.getEmail());
         userRepository.save(temp);
         return ResponseEntity.ok("User information updated successfully");
+    }
+    
+        public String nameWithoutExtension(MultipartFile file) {
+        String filename = file.getOriginalFilename();
+        String nameWithoutExtension = filename.substring(0, filename.lastIndexOf("."));
+        return nameWithoutExtension;
     }
 
     @GetMapping(value = "/avatar/{fileId}", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -117,6 +163,50 @@ public class UserController {
 
         userRepository.deleteWithRoles(user.getUsername());
         return ResponseEntity.ok("oke");
+    }
+
+    @PostMapping(value = "/signup")
+    public ResponseEntity<String> registerUser(@RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("email") String email,
+            @RequestParam("displayName") String displayName,
+            @RequestParam("dob") String dob,
+            @RequestParam("avatar") MultipartFile file) {
+        Optional<User> userOptional = userRepository.findById(username);
+
+        if (!userOptional.isPresent()) {
+
+            // Lưu ảnh vào folder UPLOAD_DIR
+            if (file != null) {
+                try {
+                    String filename = file.getOriginalFilename();
+                    byte[] bytes = file.getBytes();
+                    Path path = Paths.get(UPLOAD_DIR + filename);
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Lưu thông tin user vào database
+            User user = new User();
+            String filename = file.getOriginalFilename();
+            String nameWithoutExtension = filename.substring(0, filename.lastIndexOf("."));
+            user.setUsername(username);
+            user.setAvatarPath(nameWithoutExtension);
+            user.setPassword(password);
+            user.setDisplayName(displayName);
+            user.setDob(Date.valueOf(dob));
+            user.setCreateDate(DateTimeUtils.getSqlDateNow());
+            user.setLastActive(DateTimeUtils.getSqlTimeStampNow());
+            userRepository.save(user);
+            userRepository.saveUser_Role(user.getUsername(), 3);
+            return ResponseEntity.ok("User registered successfully");
+
+        }else{
+                return ResponseEntity.ok("User registered fail user is existed");
+        }
+        
     }
 
 }

@@ -21,5 +21,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>{
     @Query(value = "DELETE FROM Book_Category WHERE bookId = :bookId", nativeQuery = true)
     void deleteCategory(@Param("bookId") int bookId);
 
-    
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Book_Category(bookId, categoryId) VALUES ( :bookId, :categoryId);", nativeQuery = true)
+    void saveBook_Category(@Param("bookId") Integer bookId, @Param("categoryId") Integer categoryId);
 }

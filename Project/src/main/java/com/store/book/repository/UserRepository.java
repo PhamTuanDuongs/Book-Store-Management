@@ -15,23 +15,28 @@ import org.springframework.data.repository.query.Param;
  *
  * @author nhat
  */
-public interface UserRepository extends JpaRepository<User, String>{
+public interface UserRepository extends JpaRepository<User, String> {
+
     User findByUsername(String username);
-    
+
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM User_Role WHERE username = :username", nativeQuery = true)
     void deleteRolesOfUser(@Param("username") String username);
-    
+
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM User WHERE username = :username", nativeQuery = true)
     void deleteById(@Param("username") String username);
-    
+
     @Transactional
     default void deleteWithRoles(String username) {
         deleteRolesOfUser(username);
         deleteById(username);
     }
 
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO User_Role(username, roleId) VALUES ( :username, :roleId);", nativeQuery = true)
+    void saveUser_Role(@Param("username") String username, @Param("roleId") Integer roleId);
 }
