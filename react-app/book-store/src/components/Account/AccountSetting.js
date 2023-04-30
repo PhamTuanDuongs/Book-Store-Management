@@ -11,7 +11,9 @@ function AccountSetting() {
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [dob, setDob] = useState('');
+    const [avatarPath, setAvatar] = useState(null);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,6 +56,13 @@ function AccountSetting() {
                 dob
             };
             const response = await UserService.updateUser(updatedUser);
+            let temp = avatarPath;
+            if (temp !== null) {
+                const formData = new FormData();
+                formData.append("avatarPath", temp);
+                formData.append("username", user.username);
+            const responseAvatar  = await UserService.updateUserAvatar(formData);
+            }
             setUser(response.data);
             setIsEditing(false);
             navigate('/user')
@@ -62,7 +71,10 @@ function AccountSetting() {
         }
         setLoading(false);
     };
-
+    const handleAvatarFile = (e) => {
+        const file = e.target.files[0];
+        setAvatar(file);
+    };
     return (
         <div className="bg-gradient-to-br from-green-400 to-blue-500 min-h-screen flex items-center justify-center">
             <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
@@ -83,6 +95,8 @@ function AccountSetting() {
                                             <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="border-solid border-1 border-gray-950 px-4 py-2 rounded-lg w-full mb-2" />
                                             <label className="block text-gray-700 font-bold mb-2">DOB:</label>
                                             <input type="text" value={dob} onChange={(e) => setDob(e.target.value)} className="border-solid border-1 border-gray-950 px-4 py-2 rounded-lg w-full mb-2" />
+                                            <label className="block text-gray-700 font-bold mb-2">Avatar:</label>
+                                            <input type="file" accept="image/*" onChange={handleAvatarFile} />
                                             <button
                                                 onClick={handleUpdate}
                                                 type="button"

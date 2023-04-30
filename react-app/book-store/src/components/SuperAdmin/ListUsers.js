@@ -26,7 +26,7 @@ const ListUser = () => {
             <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
               {users.map((user) => (
                 <div>
-                  <img className="w-40 h-50 object-cover rounded-full mr-6" src={"http://localhost:3000/images/avatar/" + user.avatarPath} alt="User Avatar" />
+                  <img className="w-40 h-50 object-cover rounded-full mr-6" src={"http://localhost:9999/users/avatar/" + user.avatarPath} alt="User Avatar" />
                   <div>
                     <p className="text-3xl font-bold mb-2 text-gray-800">{user.displayName}</p>
                     <p className="text-xl mb-6 text-gray-700">{user.email}</p>
