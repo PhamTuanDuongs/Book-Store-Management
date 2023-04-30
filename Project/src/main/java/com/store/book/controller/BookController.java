@@ -102,8 +102,8 @@ public class BookController {
 //        return ResponseEntity.ok(book);
 //    }
     @PostMapping(value="/book/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Book> addNewBook(@RequestParam("file") MultipartFile file,
-            @RequestParam("pdf") MultipartFile pdf,
+    public ResponseEntity<Book> addNewBook(@RequestParam("coverPath") MultipartFile file,
+            @RequestParam("pdfPath") MultipartFile pdf,
             @RequestBody Book book) throws Exception {
         String coverFilename = StringUtils.cleanPath(file.getOriginalFilename());
         storageService.saveImg(file, coverFilename);

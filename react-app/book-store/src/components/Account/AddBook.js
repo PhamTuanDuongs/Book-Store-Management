@@ -76,7 +76,7 @@ const App = () => {
   return (
     <div>
       <h1>Add a new book</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}  encType="multipart/form-data" >
         <label>
           Name:
           <input type="text" value={bookName} onChange={(event) => setBookName(event.target.value)} />

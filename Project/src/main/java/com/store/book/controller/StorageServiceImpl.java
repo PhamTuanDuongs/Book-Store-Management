@@ -28,7 +28,7 @@ import org.springframework.core.io.Resource;
 public class StorageServiceImpl implements StorageService {
 
     private final Path pdfPath = Paths.get("/home/nhat/GitHub/project/Book-Store-Management/react-app/book-store/public/images/pdf");
-    private final Path imgPath = Paths.get("/home/nhat/GitHub/project/Book-Store-Management/react-app/book-store/public/images/cover");
+    private final Path coverPath = Paths.get("/home/nhat/GitHub/project/Book-Store-Management/react-app/book-store/public/images/cover");
 
     /**
      * Saves a PDF file to the file system.
@@ -59,7 +59,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void saveImg(MultipartFile file, String filename) {
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        Path targetPath = imgPath.resolve(filename);
+        Path targetPath = coverPath.resolve(filename);
         try {
             Files.createDirectories(targetPath.getParent());
             Files.copy(file.getInputStream(), targetPath);
