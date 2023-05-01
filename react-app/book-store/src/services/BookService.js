@@ -14,6 +14,15 @@ class BookService {
     getBookByCategory(){
         return axios.get("http://localhost:9999/book/category/" + localStorage.getItem('selectedCategoryId'))
     }
+
+    getBookByBookId(){
+        return axios.get("http://localhost:9999/book/bookDetail/" + localStorage.getItem('selectedBookId'))
+    }
+
+    getCreatedBy(){
+        return axios.get("http://localhost:9999/book/createdBy/" + localStorage.getItem('selectedBookId'))
+    }
+
     getBookByUserName(){
         return axios.get(BOOK_API_BASE_URL_USER);
     }

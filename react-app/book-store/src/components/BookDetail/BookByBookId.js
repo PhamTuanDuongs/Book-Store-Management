@@ -3,6 +3,7 @@ import BookService from "../../services/BookService";
 const BookByBookId = () => {
   const [loading, setLoading] = useState(false);
   const [book, setBook] = useState(null);
+  const [createdBy, setCreatedBy] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -10,6 +11,8 @@ const BookByBookId = () => {
       try {
         const response = await BookService.getBookByBookId();
         setBook(response.data);
+        const response2 = await BookService.getCreatedBy();
+        setCreatedBy(response2.data);
       } catch (error) {
         console.log(error);
       }
@@ -41,6 +44,9 @@ const BookByBookId = () => {
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-6">
                 {book.description}
+              </p>
+              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              Create by: {createdBy}
               </p>
               <div className="flex flex-col md:flex-row gap-4 items-center">
                 <a

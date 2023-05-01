@@ -7,10 +7,11 @@ import Home from './components/Home/Home';
 import ListCategory from './components/BookDetail/ListCategory';
 import Profile from './components/User/Profile';
 import BookByBookId from './components/BookDetail/BookByBookId';
-import ListUsers from './components/SuperAdmin/ListUsers'
+import ListUsers from './components/Admin/ListUsers'
 import AccountSetting from './components/Account/AccountSetting'
 import AccountRegister from './components/Account/AccountRegister'
 import AddBook from './components/AddBook/AddBook';
+import ModifyUser from './components/SuperAdmin/ModifyUser'
 function App() {
   const userRole = JSON.parse(sessionStorage.getItem('role'));
   return (
@@ -34,7 +35,7 @@ function App() {
             <Route path="/homepage" element={<Home />} />
             <Route path="/bookdetail" element={<BookByBookId />} />
             <Route path="/book/add" element={<AddBook />} />
-
+            <Route path="/superadmin" element={<ModifyUser />} />
 
           </>
         )}

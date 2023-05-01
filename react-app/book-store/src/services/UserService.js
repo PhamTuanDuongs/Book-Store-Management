@@ -23,5 +23,12 @@ class UserService {
         return axios.post(USER_BASE_REST_API_URL,formData)
     }
     
+    updateUserRole(user) {
+        return axios.post("http://localhost:9999/users/updateRole", user);
+    }
+
+    deleteUser(username) {
+        return axios.delete("http://localhost:9999/users/delete/"+username);
+    }
 }
 export default new UserService();

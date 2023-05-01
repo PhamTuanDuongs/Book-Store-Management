@@ -49,10 +49,10 @@ const ListBook = () => {
   const approveBook = async (bookId) => {
     try {
         setLoading(true);
-        const updatedUser = {
+        const updatedBook = {
             bookId: bookId,
         };
-        const response = await BookService.updateBook(updatedUser);
+        const response = await BookService.updateBook(updatedBook);
         window.location.reload();
     } catch (error) {
         console.log(error);

@@ -114,10 +114,16 @@ public class BookController {
 
     @RequestMapping(value = "book/bookDetail/{bookId}", method = RequestMethod.GET)
     public Book getByBookId(@PathVariable int bookId) {
-        Book book = bookRepository.getByBookId(bookId);
+        Book book = bookRepository.getByBookId(bookId); 
         return book;
     }
 
+    @RequestMapping(value = "book/createdBy/{bookId}", method = RequestMethod.GET)
+    public String getCreatedBy(@PathVariable int bookId) {
+        Book book = bookRepository.getByBookId(bookId); 
+        return book.getCreatedBy().getUsername();
+    }
+    
     @PostMapping(value = "/book/update")
     public ResponseEntity<String> updatePublish(@RequestBody Book book) {
         Book temp = bookRepository.getByBookId(book.getBookId());

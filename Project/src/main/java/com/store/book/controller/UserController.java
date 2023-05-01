@@ -4,9 +4,12 @@
  */
 package com.store.book.controller;
 
+import com.store.book.model.Book;
 import com.store.book.model.Feature;
 import com.store.book.model.Role;
 import com.store.book.model.User;
+import com.store.book.repository.BookRepository;
+import com.store.book.repository.CategoryRepository;
 import com.store.book.repository.FeatureRepository;
 import com.store.book.repository.RoleRepository;
 import com.store.book.repository.UserRepository;
@@ -48,13 +51,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     @Autowired
+    BookRepository bookRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
-
+    CategoryRepository categoryRepository;
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/avatar/";
     private static final String DELETE_DIR = System.getProperty("user.dir") + "/avatar/";
+    private static final String DELETE_DIR_COVER = System.getProperty("user.dir") + "/cover/";
+    private static final String DELETE_DIR_PDF = System.getProperty("user.dir") + "/pdf/";
 
     @GetMapping
     public List<User> getAllFeature() {
@@ -143,9 +150,44 @@ public class UserController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(inputStreamResource);
     }
-
+    
     @Transactional
-    @DeleteMapping("/{id}")
+    @PostMapping(value = "/updateRole")
+    public ResponseEntity<String> updateRole(@RequestBody User user) {
+        User temp = userRepository.findByUsername(user.getUsername());
+        if (temp == null) {
+            return ResponseEntity.notFound().build();
+        }
+        userRepository.saveUser_Role(temp.getUsername(), 2);
+        return ResponseEntity.ok("Update role to admin");
+    }
+
+    public void deleteBookByUser(int id) {
+        Optional<Book> book = bookRepository.findById(id);
+        String fileNameCOVER = book.get().getCoverPath(); // Lấy tên file từ đối tượng Book
+        String fileNamePDF = book.get().getPdfPath(); // Lấy tên file từ đối tượng Book
+        // xoa file pdf
+        String pdfFilePath = DELETE_DIR_PDF + fileNamePDF+".pdf";
+        File file = new File(pdfFilePath);
+        if (file.delete()) {
+            System.out.println("File " + fileNamePDF + " đã được xóa thành công.");
+        } else {
+            System.out.println("Xóa file " + fileNamePDF + " thất bại.");
+        }
+        // Nếu file là jpg
+        String coverFilePath = DELETE_DIR_COVER + fileNameCOVER+".jpg";
+        File filecover = new File(coverFilePath);
+        if (filecover.delete()) {
+            System.out.println("File " + fileNameCOVER + " đã được xóa thành công.");
+        } else {
+            System.out.println("Xóa file " + fileNameCOVER + " thất bại.");
+        }
+        categoryRepository.deleteCategory(book.get().getBookId());
+        bookRepository.delete(book.get());
+    }
+    
+    @Transactional
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         Optional<User> userOptional = userRepository.findById(id);
 
@@ -153,14 +195,11 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         User user = userOptional.get();
-        List<Role> roles = user.getRoles();
 
-        // Remove user from all roles
-        for (Role role : roles) {
-            role.getUsers().remove(user);
-            roleRepository.save(role);
+        List<Book> books = bookRepository.findByUsername(user.getUsername());
+        for (Book book : books) {
+            deleteBookByUser(book.getBookId());
         }
-
         userRepository.deleteWithRoles(user.getUsername());
         return ResponseEntity.ok("oke");
     }
