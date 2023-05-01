@@ -6,6 +6,10 @@ class CategoryService {
     getCategory(){
         return axios.get(CATEGORY_API_BASE_URL);
     }
+
+    getCategoryByBookId(){
+        return axios.get(CATEGORY_API_BASE_URL+"/"+ localStorage.getItem('selectedBookId'));
+    }
 }
 
 export default new CategoryService();

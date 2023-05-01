@@ -12,6 +12,7 @@ import AccountSetting from './components/Account/AccountSetting'
 import AccountRegister from './components/Account/AccountRegister'
 import AddBook from './components/AddBook/AddBook';
 import ModifyUser from './components/SuperAdmin/ModifyUser'
+import UpdateBook from './components/AddBook/UpdateBook';
 function App() {
   const userRole = JSON.parse(sessionStorage.getItem('role'));
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/add" element={<AccountRegister />} />
         <Route path="/listBookByCategory" element={<ListBookByCategory />} />
         <Route path="/bookdetail" element={<BookByBookId />} />
+        <Route path="/book/update" element={<UpdateBook />} />
+
         {userRole === 'Super Admin' && (
           <>
             <Route path="/admin/book" element={<ListBook />} />

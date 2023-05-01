@@ -135,6 +135,72 @@ public class BookController {
         return ResponseEntity.ok("User information updated successfully");
     }
 
+    @PostMapping("book/update/information/{categoryId}")
+    public ResponseEntity<String> updateBookInformation(@RequestBody Book book, @PathVariable("categoryId") int categoryId) {
+        // Lưu thông tin book
+        Book foundBook = bookRepository.getByBookId(book.getBookId());
+        foundBook.setTitle(book.getTitle());
+        foundBook.setAuthorName(book.getAuthorName());
+        foundBook.setDescription(book.getDescription());
+        foundBook.setPrice(book.getPrice());
+        bookRepository.save(foundBook);
+        System.out.println();
+        categoryRepository.update_Book_Category(categoryId, foundBook.getBookId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("book/update/upload/pdf")
+    public void updatePdf(
+            @RequestParam("pdfPath") MultipartFile pdfFile,
+            @RequestParam("bookId") String bookId
+    ) {
+        Book foundBook = bookRepository.getByBookId(Integer.parseInt(bookId));
+        String fileNamePDF = foundBook.getPdfPath();  // Lấy tên file từ đối tượng Book
+        if(pdfFile !=null){
+            deletePdf(fileNamePDF);
+            savePdf(pdfFile);
+            foundBook.setPdfPath(nameWithoutExtension(pdfFile));
+            bookRepository.save(foundBook);
+        }
+        
+    }
+    
+    @PostMapping("book/update/upload/cover")
+    public void updateCover(
+            @RequestParam("coverPath") MultipartFile coverFile,
+            @RequestParam("bookId") String bookId
+    ) {
+        Book foundBook = bookRepository.getByBookId(Integer.parseInt(bookId));
+        String fileNameCOVER = foundBook.getCoverPath(); // Lấy tên file từ đối tượng Book
+        if(coverFile!=null){
+            deleteCover(fileNameCOVER);
+            saveCover(coverFile);
+            foundBook.setCoverPath(nameWithoutExtension(coverFile));
+            bookRepository.save(foundBook);
+        }
+        
+    }
+
+    public void deletePdf(String fileNamePDF) {
+        String pdfFilePath = DELETE_DIR_PDF + fileNamePDF + ".pdf";
+        File file = new File(pdfFilePath);
+        if (file.delete()) {
+            System.out.println("File " + fileNamePDF + " đã được xóa thành công.");
+        } else {
+            System.out.println("Xóa file " + fileNamePDF + " thất bại.");
+        }
+    }
+
+    public void deleteCover(String fileNameCOVER) {
+        String coverFilePath = DELETE_DIR_COVER + fileNameCOVER + ".jpg";
+        File filecover = new File(coverFilePath);
+        if (filecover.delete()) {
+            System.out.println("File " + fileNameCOVER + " đã được xóa thành công.");
+        } else {
+            System.out.println("Xóa file " + fileNameCOVER + " thất bại.");
+        }
+    }
+
     @Transactional
     @DeleteMapping("/delete/{id}")
     public void deleteBook(@PathVariable("id") int id) {
@@ -142,21 +208,10 @@ public class BookController {
         String fileNameCOVER = book.get().getCoverPath(); // Lấy tên file từ đối tượng Book
         String fileNamePDF = book.get().getPdfPath(); // Lấy tên file từ đối tượng Book
         // xoa file pdf
-        String pdfFilePath = DELETE_DIR_PDF + fileNamePDF+".pdf";
-        File file = new File(pdfFilePath);
-        if (file.delete()) {
-            System.out.println("File " + fileNamePDF + " đã được xóa thành công.");
-        } else {
-            System.out.println("Xóa file " + fileNamePDF + " thất bại.");
-        }
+        deletePdf(fileNamePDF);
         // Nếu file là jpg
-        String coverFilePath = DELETE_DIR_COVER + fileNameCOVER+".jpg";
-        File filecover = new File(coverFilePath);
-        if (filecover.delete()) {
-            System.out.println("File " + fileNameCOVER + " đã được xóa thành công.");
-        } else {
-            System.out.println("Xóa file " + fileNameCOVER + " thất bại.");
-        }
+        String coverFilePath = DELETE_DIR_COVER + fileNameCOVER + ".jpg";
+        deleteCover(fileNameCOVER);
         categoryRepository.deleteCategory(book.get().getBookId());
         bookRepository.delete(book.get());
     }

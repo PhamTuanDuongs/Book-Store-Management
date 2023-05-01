@@ -25,4 +25,13 @@ public interface CategoryRepository extends JpaRepository<Category, Integer>{
     @Transactional
     @Query(value = "INSERT INTO Book_Category(bookId, categoryId) VALUES ( :bookId, :categoryId);", nativeQuery = true)
     void saveBook_Category(@Param("bookId") Integer bookId, @Param("categoryId") Integer categoryId);
+    
+    @Modifying
+    @Transactional
+    @Query(value = "Update `Book_Category` set `categoryId` = ? where bookId = ?;", nativeQuery = true)
+    void update_Book_Category(@Param("categoryId") Integer categoryId,@Param("bookId") Integer bookId);
+    
+    @Query(value = "Select * from Category c join Book_Category bc on c.categoryId = bc.categoryId Where bookId = ?;", nativeQuery = true)
+    Category category(@Param("bookId") int bookId);
+    
 }

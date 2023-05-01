@@ -126,7 +126,7 @@ const ListBookByUser = () => {
           // Hiển thị nội dung khi session tồn tại
           <div>
             <li1 onClick={handleLogout}>
-            <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
+              <button class="btn bg-transparent hover:bg-orange-500 text-white font-semibold hover:text-white py-2 px-4 border hover:border-transparent ">
                 Logout
               </button>
             </li1>
@@ -174,6 +174,21 @@ const ListBookByUser = () => {
                       />
                     </div>
                   </a>
+                  {book.isApproved ? (
+                    <span className="inline-flex items-center bg-green-500 text-white rounded-full py-1 px-3 mt-4">
+                      Public
+                    </span>
+                  ) : (
+                    <a href="/book/update">
+                      <div onClick={() => handleBookButtonClick(book.bookId)}>
+                        <button
+                          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mt-4"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </a>
+                  )}
                   <a
                     href={"http://localhost:9999/pdf/" + book.pdfPath}
                     className="cta-btn transition duration-500 ease-in-out focus:outline-none active:bg-green-700 hover:bg-yellow-500"

@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/avatar/update")
-    public void registerFile(@RequestParam("avatarPath") MultipartFile fileUpdate, @RequestParam("username") String username) {
+    public void updateAvatar(@RequestParam("avatarPath") MultipartFile fileUpdate, @RequestParam("username") String username) {
         User foundUser = userRepository.findByUsername(username);
         String fileNameJPG = foundUser.getAvatarPath();
         String jpgFilePath = DELETE_DIR+ fileNameJPG +".jpg";
@@ -236,6 +236,7 @@ public class UserController {
             user.setPassword(password);
             user.setDisplayName(displayName);
             user.setDob(Date.valueOf(dob));
+            user.setEmail(email);
             user.setCreateDate(DateTimeUtils.getSqlDateNow());
             user.setLastActive(DateTimeUtils.getSqlTimeStampNow());
             userRepository.save(user);

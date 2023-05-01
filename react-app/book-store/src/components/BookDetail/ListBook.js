@@ -31,20 +31,7 @@ const ListBook = () => {
   const handleBookButtonClick = (bookId) => {
     saveBookId(bookId);
   };
-
-  // const approveBook = async (bookId) => {
-  //   try {
-  //     await BookService.approveBook(bookId); // Call an API to update the book's isApproved attribute to 1
-  //     // setBooks((prevState) =>
-  //     //   prevState.map((book) =>
-  //     //     book.id === bookId ? { ...book, isApproved: 1 } : book
-  //     //   )
-  //     // ); // Update the state of books to reflect the change
-  //     setAlertMessage("Approved"); // Set alert message
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+ 
 
   const approveBook = async (bookId) => {
     try {

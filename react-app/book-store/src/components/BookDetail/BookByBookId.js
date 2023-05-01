@@ -30,7 +30,7 @@ const BookByBookId = () => {
           <div className="flex flex-col md:flex-row justify-between items-center mt-16 mb-24">
             <div className="w-full md:w-1/2 mb-12 md:mb-0 flex justify-center">
               <img
-                src={"images/" + book.coverPath}
+                src={"http://localhost:9999/cover/" + book.coverPath}
                 alt="Book cover"
                 className="rounded-lg shadow-lg h-[400px] w-[300px]"
               />
