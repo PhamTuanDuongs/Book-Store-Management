@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function AddBook() {
   const [title, setTitle] = useState("");
@@ -10,9 +11,9 @@ function AddBook() {
   const [coverFile, setCoverFile] = useState(null);
   const [category, setCategory] = useState("");
   const username = sessionStorage.getItem("pageView");
-
+  const [isAdded, setIsAdded] = useState(false);
   const [categories, setCategories] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("http://localhost:9999/category")
@@ -26,7 +27,6 @@ function AddBook() {
 
   const handleAddBook = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("author", author);
@@ -41,16 +41,25 @@ function AddBook() {
       .post("http://localhost:9999/add", formData)
       .then((response) => {
         console.log(response.data);
-        // do something after successful book addition
+        alert("Add book successfully!");
+        navigate('/book/view');
       })
       .catch((error) => {
         console.log(error);
+        alert("Failed to add book!");
       });
   };
 
   const handlePdfFile = (e) => {
     const file = e.target.files[0];
-    setPdfFile(file);
+    // Kiểm tra kích thước file, không cho phép chọn file quá 10MB
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Không cho phép chọn file quá 10MB");
+      e.target.value = null; // Xóa file đã chọn
+      return;
+    }else{
+      setPdfFile(file);
+    }
   };
 
   const handleCoverFile = (e) => {
@@ -75,6 +84,7 @@ function AddBook() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               id="title"
+              required
             />
           </div>
         </div>
@@ -92,6 +102,7 @@ function AddBook() {
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               id="author"
+              required
             />
           </div>
         </div>
@@ -108,6 +119,7 @@ function AddBook() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               id="description"
+              required
             />
           </div>
         </div>
@@ -125,6 +137,7 @@ function AddBook() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               id="price"
+              required
             />
           </div>
         </div>
@@ -142,6 +155,7 @@ function AddBook() {
               accept=".pdf"
               onChange={handlePdfFile}
               id="pdfFile"
+              required
             />
           </div>
         </div>
@@ -159,6 +173,7 @@ function AddBook() {
               accept="image/*"
               onChange={handleCoverFile}
               id="coverFile"
+              required
             />
           </div>
         </div>
@@ -175,6 +190,7 @@ function AddBook() {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               id="category"
+              required
             >
               <option value="">Select a category</option>
               {categories.map((category) => (

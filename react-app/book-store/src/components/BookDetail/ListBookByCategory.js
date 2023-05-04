@@ -8,6 +8,8 @@ const ListBookByCategory = () => {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const session = sessionStorage.getItem("pageView");
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -121,7 +123,7 @@ const ListBookByCategory = () => {
             />
           </liv>
         </li>
-        {isLoggedIn ? (
+        {isLoggedIn && session !== null? (
           // Hiển thị nội dung khi session tồn tại
           <div>
             <li1 onClick={handleLogout}>

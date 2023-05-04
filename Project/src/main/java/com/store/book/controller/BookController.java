@@ -288,7 +288,7 @@ public class BookController {
         bookRepository.save(book);
         categoryRepository.saveBook_Category(BookId, categoryId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("User information updated successfully");
     }
 
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function SignupForm() {
   const [username, setUsername] = useState("");
@@ -9,6 +10,7 @@ function SignupForm() {
   const [dob, setDob] = useState("");
   const [notification, setNotification] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -25,7 +27,8 @@ function SignupForm() {
       .then((response) => {
         console.log(response.data);
         setNotification(response.data);
-        // do something after successful signup
+        alert("Register successfully!");
+        navigate('/login');
       })
       .catch((error) => {
         console.log(error);
