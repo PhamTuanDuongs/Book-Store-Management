@@ -287,7 +287,6 @@ public class BookController {
         book.setCoverPath(nameWithoutExtension(coverFile));
         bookRepository.save(book);
         categoryRepository.saveBook_Category(BookId, categoryId);
-
         return ResponseEntity.ok("User information updated successfully");
     }
 
